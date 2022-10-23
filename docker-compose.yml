@@ -5,6 +5,7 @@ services:
     volumes:
       - ~/mongors/data1:/data/db
       - ./rs-init.sh:/scripts/rs-init.sh
+      - ./security.key:/mongo-config/security.key
     networks:
       - mongo-cluster-network
     ports:
@@ -13,29 +14,31 @@ services:
       - mongo2
       - mongo3
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+    entrypoint: [ "/usr/bin/mongod", "--keyFile", "/mongo-config/security.key", "--auth", "--bind_ip","localhost,mongo1", "--replSet", "dbrs" ]
   mongo2:
     container_name: mongo2
     image: mongo
     volumes:
       - ~/mongors/data2:/data/db
+      - ./security.key:/mongo-config/security.key
     networks:
       - mongo-cluster-network
     ports:
       - 27022:27017
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+    entrypoint: [ "/usr/bin/mongod", "--keyFile", "/mongo-config/security.key", "--auth", "--bind_ip", "localhost,mongo2", "--replSet", "dbrs" ]
   mongo3:
     container_name: mongo3
     image: mongo
     volumes:
       - ~/mongors/data3:/data/db
+      - ./security.key:/mongo-config/security.key
     networks:
       - mongo-cluster-network
     ports:
       - 27023:27017
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+    entrypoint: [ "/usr/bin/mongod", "--keyFile", "/mongo-config/security.key", "--auth", "--bind_ip", "localhost,mongo3", "--replSet", "dbrs" ]
 
 networks:
   mongo-cluster-network:

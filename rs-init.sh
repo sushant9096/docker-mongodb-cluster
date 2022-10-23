@@ -1,6 +1,20 @@
 #!/bin/bash
-
+DB_PASS=$DB_PASS
 mongosh <<EOF
+use admin
+db.createUser(
+  {
+    user: "root",
+    pwd: ${!DB_PASS}, // or cleartext password
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+      { role: "readWriteAnyDatabase", db: "admin" }
+    ]
+  }
+)
+EOF
+
+mongosh -u "root" -p DB_PASS --authenticationDatabase "admin" <<EOF
 var config = {
     "_id": "dbrs",
     "version": 1,
