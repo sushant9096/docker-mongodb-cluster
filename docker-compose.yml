@@ -5,6 +5,7 @@ services:
     volumes:
       - ~/mongors/data1:/data/db
       - ./rs-init.sh:/scripts/rs-init.sh
+      - ./db-user-init.sh:/scripts/db-user-init.sh
       - ./security.key:/mongo-config/security.key
     networks:
       - mongo-cluster-network
