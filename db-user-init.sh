@@ -1,6 +1,8 @@
 DB_PASS=$DB_PASS
+SYSTEM_PASS=$SYSTEM_PASS
 
-mongosh -u "system" -p "system" --authenticationDatabase "admin" <<EOF
+mongosh -u "system" -p $SYSTEM_PASS --authenticationDatabase "admin" <<EOF
+echo "DB_PASS="$DB_PASS
 use admin
 db.createUser(
   {

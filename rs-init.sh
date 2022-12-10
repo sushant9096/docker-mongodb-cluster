@@ -1,12 +1,12 @@
 #!/bin/bash
-SYSTEM_PASS=$DB_PASS
-
+SYSTEM_PASS=$SYSTEM_PASS
+echo "SYSTEM_PASS="$SYSTEM_PASS
 mongosh <<EOF
 use admin
 db.createUser(
   {
     user: "system",
-    pwd: "system", // or cleartext password
+    pwd: ${!SYSTEM_PASS}, // or cleartext password
     roles: [
       { role: "userAdminAnyDatabase", db: "admin" },
       { role: "readWriteAnyDatabase", db: "admin" },
@@ -18,7 +18,7 @@ db.createUser(
 )
 EOF
 
-mongosh -u "system" -p SYSTEM_PASS --authenticationDatabase "admin" <<EOF
+mongosh -u "system" -p $SYSTEM_PASS --authenticationDatabase "admin" <<EOF
 var config = {
     "_id": "dbrs",
     "version": 1,
