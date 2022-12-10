@@ -1,6 +1,6 @@
 #!/bin/bash
 openssl rand -base64 756 > security.key
-chmod 400 security.key
+sudo chmod 400 security.key
 docker compose up -d
 
 sleep 5
