@@ -43,4 +43,5 @@ services:
 
 networks:
   mongo-cluster-network:
+    external: true
     driver: bridge
