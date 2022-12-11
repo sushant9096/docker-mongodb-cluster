@@ -2,10 +2,14 @@ services:
   mongo1:
     container_name: mongo1
     image: mongo
+    environment:
+      - DB_PASS=${DB_PASS}
+      - SYSTEM_PASS=${SYSTEM_PASS}
     volumes:
       - ~/mongors/data1:/data/db
       - ./rs-init.sh:/scripts/rs-init.sh
       - ./db-user-init.sh:/scripts/db-user-init.sh
+      - ./system-user-init.sh:/scripts/system-user-init.sh
       - ./security.key:/mongo-config/security.key
     networks:
       - mongo-cluster-network

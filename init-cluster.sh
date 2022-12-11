@@ -1,12 +1,8 @@
 #!/bin/bash
-sudo openssl rand -base64 756 > security.key
-sudo chmod 0400 ./security.key
-docker compose up -d
-
+rsVar="./scripts/rs-init.sh"
+echo ${rsVar}
+docker exec mongo1 ${rsVar}
+sleep 10
+./init-cluster2.sh
 sleep 5
-var2="export SYSTEM_PASS=$SYSTEM_PASS && ./scripts/rs-init.sh"
-echo ${var2}
-var3="export DB_PASS=$DB_PASS && ./scripts/db-user-init.sh"
-docker exec mongo1 /bin/bash -c ${var3}
-echo ${var3}
-#docker exec -it mongo1 /bin/bash
+./init-cluster3.sh
