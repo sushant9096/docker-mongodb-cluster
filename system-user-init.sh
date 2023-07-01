@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo SYSTEM_PASS="$SYSTEM_PASS"
 mongosh <<EOF
 use admin
 var config = {

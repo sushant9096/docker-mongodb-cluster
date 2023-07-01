@@ -1,7 +1,6 @@
 #!/bin/bash
-
+echo DB_PASS="$DB_PASS"
 mongosh -u "system" -p "$SYSTEM_PASS" --authenticationDatabase "admin" <<EOF
-echo $DB_PASS
 use admin
 db.createUser(
   {

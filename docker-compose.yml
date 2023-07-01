@@ -10,7 +10,7 @@ services:
       - ./rs-init.sh:/scripts/rs-init.sh
       - ./db-user-init.sh:/scripts/db-user-init.sh
       - ./system-user-init.sh:/scripts/system-user-init.sh
-      - ./security.key:/mongo-config/security.key
+      - ./security.key:/tmp/security.key
     networks:
       - mongo-cluster-network
     ports:
@@ -19,31 +19,50 @@ services:
       - mongo2
       - mongo3
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--keyFile", "/mongo-config/security.key", "--auth", "--bind_ip","localhost,mongo1", "--replSet", "dbrs" ]
+    entrypoint: [ "/bin/bash", "-c" ]
+    command:
+      - |
+        mkdir -p /mongo-config
+        cp /tmp/security.key /mongo-config/security.key
+        chmod 400 /mongo-config/security.key
+        /usr/bin/mongod --keyFile /mongo-config/security.key --auth --bind_ip localhost,mongo1 --replSet dbrs
   mongo2:
     container_name: mongo2
     image: mongo
     volumes:
       - ~/mongors/data2:/data/db
-      - ./security.key:/mongo-config/security.key
+      - ./security.key:/tmp/security.key
     networks:
       - mongo-cluster-network
     ports:
       - 27022:27017
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--keyFile", "/mongo-config/security.key", "--auth", "--bind_ip", "localhost,mongo2", "--replSet", "dbrs" ]
+    entrypoint: [ "/bin/bash", "-c" ]
+    command:
+      - |
+        mkdir -p /mongo-config
+        cp /tmp/security.key /mongo-config/security.key
+        chmod 400 /mongo-config/security.key
+        /usr/bin/mongod --keyFile /mongo-config/security.key --auth --bind_ip localhost,mongo2 --replSet dbrs
+
   mongo3:
     container_name: mongo3
     image: mongo
     volumes:
       - ~/mongors/data3:/data/db
-      - ./security.key:/mongo-config/security.key
+      - ./security.key:/tmp/security.key
     networks:
       - mongo-cluster-network
     ports:
       - 27023:27017
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--keyFile", "/mongo-config/security.key", "--auth", "--bind_ip", "localhost,mongo3", "--replSet", "dbrs" ]
+    entrypoint: [ "/bin/bash", "-c" ]
+    command:
+      - |
+        mkdir -p /mongo-config
+        cp /tmp/security.key /mongo-config/security.key
+        chmod 400 /mongo-config/security.key
+        /usr/bin/mongod --keyFile /mongo-config/security.key --auth --bind_ip localhost,mongo3 --replSet dbrs
 
 networks:
   mongo-cluster-network:
